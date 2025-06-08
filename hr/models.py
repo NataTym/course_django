@@ -2,6 +2,22 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 
+class Company(models.Model): #models.Model означає, що Post є Django моделлю, отже Django знає, що вона повинна бути збережена у базі даних
+    # models.CharField - для текстових полів з обмеженням кількісті символів
+    name = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
+    email = models.EmailField
+    tax_code = models.CharField(max_length=10, unique=True)
+
+    def save(self, *args, **kwargs):
+        # Забезпечення того, що існує лише один інстанс
+        if not self.pk and Company.objects.exists():
+            raise ValidationError('There can be only one Company instance.')
+        return super(Company, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
 
 class Department(models.Model):
     name = models.CharField(max_length=200)
@@ -15,6 +31,7 @@ class Position(models.Model):
     title = models.CharField(max_length=200)
     department = models.ForeignKey('Department', on_delete=models.CASCADE)
     is_manager = models.BooleanField(default=False)
+    job_description = models.TextField(null=True)
 
     def save(self, *args, **kwargs):
         if self.is_manager:
@@ -31,3 +48,4 @@ class Employee(AbstractUser):
     hire_date = models.DateField(null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     position = models.ForeignKey('Position', on_delete=models.SET_NULL, null=True, blank=True)
+    phone_number = models.CharField(max_length=11, null=True, blank=True)

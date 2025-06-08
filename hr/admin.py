@@ -2,10 +2,15 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 
 from hr.models import (
+    Company,
     Department,
     Employee,
     Position,
 )
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'address', 'email', 'tax_code')
 
 
 @admin.register(Department)
@@ -15,7 +20,7 @@ class DepartmentAdmin(admin.ModelAdmin):
 
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'department', 'is_manager')
+    list_display = ('title', 'department', 'is_manager', 'job_description')
 
     def save_model(self, request, obj, form, change):
         try:
@@ -27,4 +32,4 @@ class PositionAdmin(admin.ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('username', 'position', 'hire_date',)
+    list_display = ('username', 'position', 'hire_date', 'phone_number')
