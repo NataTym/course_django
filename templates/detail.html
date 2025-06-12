@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Employee profile{% endblock %}
+
+{% block content %}
+
+
+    <h1>Employee profile</h1>
+    <p>First Name: {{ employee.first_name }}</p>
+    <p>Last Name: {{ employee.last_name }}</p>
+    <p>Email: {{ employee.email }}</p>
+    <p>Hire Date: {{ employee.hire_date }}</p>
+    <p>Birth Date: {{ employee.birth_date }}</p>
+    <p>Position: {{ employee.position }}</p>
+    <p>Position Title: {{ employee.position.title }}</p>
+    <p>Department: {{ employee.position.department }}</p>
+
+
+    <! -- Включіть також посилання до сторінок редагування та видалення цього працівника (лише для superadmin). -->
+
+    <p>{% if request.user.is_superuser %}
+        <a href="{% url 'employee_update' employee.pk %}" class="btn btn-primary">Update</a>
+        <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-danger">Delete</a>
+    {% endif %}</p>
+
+    <a href="{% url 'employee_list' %}">← Back to list</a>
+
+{% endblock %}

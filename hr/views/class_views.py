@@ -7,6 +7,7 @@ from django.shortcuts import (
 )
 from django.urls import reverse
 from django.views import View
+from django.views.generic import DeleteView, DetailView
 
 from hr.forms import EmployeeForm
 from hr.models import Employee
@@ -25,7 +26,8 @@ class EmployeeListView(View):
             employees = employees.filter(
                 Q(first_name__icontains=search)
                 | Q(last_name__icontains=search)
-                | Q(position__title__icontains=search),
+                | Q(position__title__icontains=search)
+                | Q(email__icontains=search)
             )
 
         context = {"employees": employees}
@@ -78,3 +80,10 @@ class EmployeeDeleteView(UserPassesTestMixin, View):
 
     def test_func(self):
         return user_is_superadmin(self.request.user)
+
+class EmployeeDetailView(View):
+    def get(self, request, pk):
+        employee = get_object_or_404(Employee, pk=pk)
+        return render(request, "detail.html", {"employee": employee})
+
+

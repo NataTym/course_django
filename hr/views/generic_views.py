@@ -62,3 +62,9 @@ class EmployeeDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return user_is_superadmin(self.request.user)
+
+
+class EmployeeDetailView(DetailView):
+    model = Employee
+    context_object_name = "employee"
+    template_name = "detail.html"
