@@ -10,7 +10,6 @@ from django.urls import reverse
 from hr.forms import EmployeeForm
 from hr.models import Employee
 
-
 def user_is_superadmin(user) -> bool:
     return user.is_superuser
 
@@ -32,7 +31,6 @@ def employee_list(request):
 
     context = {"employees": employees}
     return render(request, "employee_list.html", context)
-
 
 @user_passes_test(user_is_superadmin)
 def employee_create(request):

@@ -7,10 +7,12 @@ from django.shortcuts import (
 )
 from django.urls import reverse
 from django.views import View
-from django.views.generic import DeleteView, DetailView
 
 from hr.forms import EmployeeForm
 from hr.models import Employee
+from django.core.paginator import Paginator
+
+from hr.views.function_views import employee_list
 
 
 def user_is_superadmin(user) -> bool:
@@ -33,6 +35,10 @@ class EmployeeListView(View):
         context = {"employees": employees}
         return render(request, "employee_list.html", context)
 
+        # paginator = Paginator(employees, 3)
+        # page_number = request.GET.get("page")
+        # page_obj = paginator.get_page(page_number)
+        # return render(request, "employee_list.html", {"employees": employees, "page_obj": page_obj})
 
 class EmployeeCreateView(UserPassesTestMixin, View):
     def get(self, request):
