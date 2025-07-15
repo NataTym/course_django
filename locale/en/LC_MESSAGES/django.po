@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-07 15:48+0300\n"
+"POT-Creation-Date: 2025-07-13 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hr/models.py:33
+#: hr/models.py:35
 msgid "Title"
 msgstr ""
 
-#: hr/models.py:37
+#: hr/models.py:39
 msgid "Job Description"
 msgstr ""
 
 #: templates/base.html:29
 msgid "Change Language"
+msgstr ""
+
+#: templates/employee_confirm_delete.html:6
+msgid "Confirm Delete"
+msgstr ""
+
+#: templates/employee_confirm_delete.html:7
+msgid "Are you sure you want to delete"
+msgstr ""
+
+#: templates/employee_confirm_delete.html:10 templates/employee_list.html:49
+msgid "Delete"
+msgstr ""
+
+#: templates/employee_confirm_delete.html:11
+msgid "Cancel"
 msgstr ""
 
 #: templates/employee_list.html:10
@@ -60,10 +76,6 @@ msgstr ""
 
 #: templates/employee_list.html:48
 msgid "Update"
-msgstr ""
-
-#: templates/employee_list.html:49
-msgid "Delete"
 msgstr ""
 
 #: templates/employee_list.html:50

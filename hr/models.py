@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Company(models.Model):
     name = models.CharField(max_length=100)
-    address = models.CharField(max_length=200)
+    address = models.CharField(max_length=200, verbose_name=_('Address'))
     email = models.EmailField()
     tax_code = models.CharField(max_length=200)
 
@@ -22,9 +22,9 @@ class Company(models.Model):
 
 
 class Department(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(verbose_name=_('Name'), max_length=200)
     parent_department = models.ForeignKey(
-        'self', on_delete=models.SET_NULL, null=True, blank=True,
+        'self', verbose_name=_('Parent Department'),  on_delete=models.SET_NULL, null=True, blank=True
     )
 
     def __str__(self):
