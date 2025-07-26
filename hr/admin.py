@@ -3,11 +3,15 @@ from django.core.exceptions import ValidationError
 from modeltranslation.admin import TranslationAdmin
 
 from hr.models import (
+    Company,
     Department,
     Employee,
     Position,
 )
 
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ("name", "address")
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):

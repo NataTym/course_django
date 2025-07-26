@@ -12,6 +12,7 @@ class Company(models.Model):
     address = models.CharField(max_length=200)
     email = models.EmailField()
     tax_code = models.CharField(max_length=200)
+    logo = models.ImageField(upload_to='logo/', null=True, blank=True)
 
     def __str(self):
         return self.name
