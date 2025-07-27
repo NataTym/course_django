@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
     <div class="container mt-5">
@@ -8,13 +9,21 @@
                 <div class="mr-15">
                     Avatar :
                 </div>
-                <img src="{{ employee.avatar.url }}" alt="Avatar" width=100>
+                {% if employee.avatar %}
+                    <img src="{{ employee.avatar.url }}" alt="Avatar" width=100>
+                {% else %}
+                    <img src="{% static 'img/default-avatar.png' %}" alt="No avatar" width="100">
+                {% endif %}
             </li>
             <li class="list-group-item d-flex">
                 <div class="mr-15">
                     CV :
                 </div>
-                <a href="{{ employee.cv.url }}">Download CV</a>
+                {% if employee.cv %}
+                    <a href="{{ employee.cv.url }}">Download CV</a>
+                {% else %}
+                    <span>No CV uploaded</span>
+                {% endif %}
             </li>
             <li class="list-group-item d-flex">
                 <div class="mr-15">

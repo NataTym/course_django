@@ -23,8 +23,7 @@ urlpatterns = [
         name='employee_delete',
     ),
     path(
-        'employees/profile/<int:pk>/',
-        views.EmployeeProfileView.as_view(),
+        'employees/profile/<int:pk>/', cache_page(180, cache='my_key', key_prefix='employee_list')(views.EmployeeProfileView.as_view()),
         name='employee_profile',
     ),
     path(

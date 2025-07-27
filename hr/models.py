@@ -48,6 +48,10 @@ class Position(models.Model):
     job_description = models.CharField(verbose_name=_("Job Description"), max_length=500, default="")
     monthly_rate = models.IntegerField(default=0)
 
+    @cached_property
+    def unique_position_count(self):
+        return self.position_set.values('title').distinct().count()
+
     def save(self, *args, **kwargs):
         if self.is_manager:
             existing_manager = (
