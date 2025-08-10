@@ -1,4 +1,5 @@
 from django.contrib.messages import get_messages
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import (
     Client,
     TestCase,
@@ -93,3 +94,34 @@ class EmployeeCreateViewTest(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Працівника успішно створено.')
 
+
+class EmployeeProfileView(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.employees = EmployeeFactory.create_batch(10)
+        self.employee = self.employees[0]
+        self.employee.avatar = SimpleUploadedFile("test.jpg", b"content", content_type="image/jpeg")
+        self.employee.cv = SimpleUploadedFile("test.pdf", b"fake pdf content", content_type="application/pdf")
+        self.employee.save()
+        self.admin_user = EmployeeFactory(is_staff=True, is_superuser=True)
+        self.non_admin_user = EmployeeFactory(is_staff=False, is_superuser=False)
+        self.url = reverse('hr:employee_profile', kwargs={'pk': self.employee.pk})
+
+    def test_access_employee_view(self):
+        self.client.force_login(self.admin_user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_employee_view_content(self):
+        self.client.force_login(self.admin_user)
+        response = self.client.get(self.url )
+      #  self.assertTrue('employee' in response.context)
+        self.assertContains(response, self.employee.first_name)
+        self.assertContains(response, self.employee.last_name)
+        self.assertContains(response, self.employee.email)
+
+    def test_access_employee_view_if_not_superuser(self):
+        not_employee = EmployeeFactory(is_staff=False, is_superuser=False)
+        self.client.force_login(not_employee)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
