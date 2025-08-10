@@ -121,7 +121,62 @@ class EmployeeProfileView(TestCase):
         self.assertContains(response, self.employee.email)
 
     def test_access_employee_view_if_not_superuser(self):
-        not_employee = EmployeeFactory(is_staff=False, is_superuser=False)
-        self.client.force_login(not_employee)
+        self.client.force_login(self.non_admin_user)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 403)
+
+
+class EmployeeDeleteView(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.admin_user = EmployeeFactory(is_staff=True, is_superuser=True)
+        self.non_admin_user = EmployeeFactory(is_staff=False, is_superuser=False)
+        self.employee = EmployeeFactory()
+        self.position = PositionFactory()
+        self.url = reverse('hr:employee_create')
+
+    def test_successful_employee_creation(self):
+        self.client.force_login(self.admin_user)
+        username = 'newuser'
+        employee_data = {
+            'username': username,
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'johndoe@example.com',
+            'position': self.position.id,
+        }
+        # response = self.client.post(self.url, employee_data)
+        response = self.client.post(self.url, employee_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Employee.objects.filter(username=username).exists())
+
+    def test_create_employee_by_non_admin(self):
+        self.client.force_login(self.non_admin_user)
+        username = 'newuser'
+        employee_data = {
+            'username': username,
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'johndoe@example.com',
+            'position': self.position.id,
+        }
+        response = self.client.post(self.url, employee_data)
+        # response = self.client.post(self.url, employee_data)
+        self.assertNotEqual(response.status_code, 302)
+        self.assertFalse(Employee.objects.filter(username=username).exists())
+
+    def test_successful_employee_creation_message(self):
+        self.client.force_login(self.admin_user)
+        username = 'newuser'
+        employee_data = {
+            'username': username,
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'johndoe@example.com',
+            'position': self.position.id,
+        }
+        # response = self.client.post(self.url, employee_data)
+        response = self.client.post(self.url, employee_data)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'Працівника успішно створено.')
