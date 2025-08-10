@@ -5,10 +5,10 @@ from rest_framework.test import (
     APITestCase,
 )
 
-from hr.models import Employee
+from hr.models import Employee, Department
 from hr.tests.factories import (
     EmployeeFactory,
-    PositionFactory,
+    PositionFactory, DepartmentFactory,
 )
 
 
@@ -48,4 +48,42 @@ class EmployeeAPITestCase(APITestCase):
     def test_search_employee(self):
         response = self.client.get(reverse('api-hr:employee-list'), {'search': 'Test'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+
+
+class PositionViewSetTestCase(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = EmployeeFactory()
+        self.position = PositionFactory()
+        self.department = DepartmentFactory()
+        self.client.force_authenticate(user=self.user)
+
+    def test_get_position_list(self):
+        response = self.client.get(reverse('api-hr:position-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create_position(self):
+        data = {
+            'title': "new_position",
+            'department': self.department.pk,
+            'is_manager': False,
+            'is_active': True,
+            'job_description': "description",
+            'monthly_rate': 20000
+        }
+        response = self.client.post(reverse('api-hr:position-list'), data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_update_position(self):
+        position = PositionFactory(department=self.department)
+        data = {'title': 'Updated Title'}
+        response = self.client.patch(reverse('api-hr:position-detail', kwargs={'pk': position.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_employee(self):
+        position = PositionFactory(department=self.department)
+        response = self.client.delete(reverse('api-hr:position-detail', kwargs={'pk': position.pk}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
