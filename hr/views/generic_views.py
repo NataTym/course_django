@@ -65,6 +65,15 @@ class EmployeeUpdateView(UserIsAdminMixin, UpdateView):
     template_name = 'employee_form.html'
     success_url = reverse_lazy('hr:employee_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Інформацію про працівника оновлено успішно.')
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Помилка при оновленні працівника.')
+        return super().form_invalid(form)
+
 
 class EmployeeDeleteView(UserIsAdminMixin, DeleteView):
     model = Employee

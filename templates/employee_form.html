@@ -2,6 +2,21 @@
 
 {% block content %}
 <div class="container mt-5">
+
+    {% if messages %}
+        <div class="mb-3">
+            {% for message in messages %}
+                <div class="alert
+                    {% if message.tags == 'success' %}alert-success{% endif %}
+                    {% if message.tags == 'error' %}alert-danger{% endif %}
+                ">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
     <form method="post" class="form">
         {% csrf_token %}
 
